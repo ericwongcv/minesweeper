@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "../1. Software Engineering Foundations"
+		},
+		{
+			"path": "../2. Ruby"
+		},
+		{
+			"path": "../3. Git"
+		},
+		{
+			"path": "../3.1 screwedoku"
+		},
+		{
+			"path": "."
+		}
+	],
+	"settings": {}
+}

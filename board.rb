@@ -50,6 +50,15 @@ class Board
         end
     end
 
+    def reveal
+        @grid.each do |row|
+            row.each do |tile|
+                tile.reveal
+            end
+        end
+        render
+    end
+
 end
 
 # board = Board.new

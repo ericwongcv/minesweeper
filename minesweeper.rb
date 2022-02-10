@@ -11,7 +11,7 @@ class Minesweeper
 
     def play_game
         @board.render
-        until win? or @hit_bomb
+        until win? || @hit_bomb
             begin
                 puts
                 puts "Please choose action (f for flag and s for select): "
@@ -37,19 +37,32 @@ class Minesweeper
     end
 
     def game_over?(pos)
-        return true if @board.bomb_coords.include?(pos)
+        if @board.bomb_coords.include?(pos)
+            @board.reveal
+            return true 
+        end
     end
 
     def turn(action, pos)
+        tile = @board[pos]
         case action
             
         when "f"
-            @board[pos].flag
+            if !tile.revealed? || tile.flagged?
+                @board[pos].flag
+            else
+                puts "Position cannot be flagged."
+            end
         when "s"
-            if !@board[pos].flagged? && !game_over?(pos)
-                @board[pos].explore 
+            if tile.revealed?
+                puts
+                puts "Tile is already revealed."
+            elsif !tile.flagged? && !game_over?(pos)
+                tile.explore             
             elsif game_over?(pos)
+                puts
                 puts "You hit a bomb! Game over."
+                puts
                 return @hit_bomb = true
             else
                 puts
@@ -66,13 +79,16 @@ class Minesweeper
     def valid_position?(pos)
         nums = (0..9).to_a
         pos_arr = pos.split(",")
-        return false if pos.length != 3
-        return false if pos_arr.length != 2 
-        pos_arr.map(&:to_i).all? { |num| nums.include?(num) }
+        if pos.length != 3 || pos_arr.length != 2 || !pos_arr.map(&:to_i).all? { |num| nums.include?(num) }
+            puts "Invalid Position."
+            return false 
+        end
+        true
     end
 
     def valid_action?(action)
-        return true if action == "f" || action == "s"
+        return true if action[0] == "f" || action[0] == "s"
+        puts "Invalid Action."
         false
     end
 
