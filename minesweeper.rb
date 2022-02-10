@@ -1,4 +1,5 @@
 require_relative "board.rb"
+require "yaml"
 require "byebug"
 
 class Minesweeper
@@ -11,12 +12,19 @@ class Minesweeper
 
     def play_game
         @board.render
-        until win? || @hit_bomb
+
+        until @hit_bomb || win?
+
             begin
                 puts
-                puts "Please choose action (f for flag and s for select): "
+                puts "Please choose action ('f' for flag, 's' for select, or 'save' to save game): "
                 action = gets.chomp.downcase
                 play_game if !valid_action?(action)
+
+                if action == "save"
+                    save
+                    break
+                end
 
                 puts "Please choose a position to perform your action. (ex. 3,4): "
                 pos = gets.chomp
@@ -41,38 +49,41 @@ class Minesweeper
             @board.reveal
             return true 
         end
+        false
     end
 
     def turn(action, pos)
         tile = @board[pos]
-        case action
-            
-        when "f"
-            if !tile.revealed? || tile.flagged?
-                @board[pos].flag
+
+        case action            
+            when "f"
+                if !tile.revealed? || tile.flagged?
+                    @board[pos].flag
+                else
+                    puts "Position cannot be flagged."
+                end
+            when "s"
+                if tile.revealed?
+                    puts
+                    puts "Tile is already revealed."
+                elsif !tile.flagged? && !game_over?(pos)
+                    tile.explore             
+                elsif !tile.flagged? && game_over?(pos)
+                    puts
+                    puts "You hit a bomb! Game over."
+                    @board.render
+                    puts
+                    return @hit_bomb = true
+                else
+                    puts
+                    puts "Position is flagged."
+                    play_game
+                end
+            when "save"
+                save
             else
-                puts "Position cannot be flagged."
-            end
-        when "s"
-            if tile.revealed?
-                puts
-                puts "Tile is already revealed."
-            elsif !tile.flagged? && !game_over?(pos)
-                tile.explore             
-            elsif !tile.flagged? && game_over?(pos)
-                puts
-                puts "You hit a bomb! Game over."
-                puts
-                return @hit_bomb = true
-            else
-                puts
-                puts "Position is flagged."
-                play_game
-            end
-        else
             play_game
         end
-        
         @board.render
     end
 
@@ -87,11 +98,28 @@ class Minesweeper
     end
 
     def valid_action?(action)
-        return true if action[0] == "f" || action[0] == "s"
+        return true if action == "f" || action == "s" || action == "save"
         puts "Invalid Action."
         false
     end
 
+    def save
+        puts "Enter filename to save:"
+        filename = gets.chomp
+    
+        File.write(filename, YAML.dump(self))
+    end
+
 end
 
-Minesweeper.new.play_game
+if $PROGRAM_NAME == __FILE__
+    # running as script
+  
+    case ARGV.count
+    when 0
+      Minesweeper.new.play_game
+    when 1
+      # resume game, using first argument
+      YAML.load_file(ARGV.shift).play_game
+    end
+end

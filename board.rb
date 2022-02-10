@@ -56,7 +56,6 @@ class Board
                 tile.reveal
             end
         end
-        render
     end
 
 end
