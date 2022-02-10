@@ -6,12 +6,12 @@ class Minesweeper
     def initialize
         @board = Board.new
         @grid = @board.grid
+        @hit_bomb = false
     end
 
     def play_game
         @board.render
-        until win? or game_over?
-            
+        until win? or @hit_bomb
             begin
                 puts
                 puts "Please choose action (f for flag and s for select): "
@@ -37,7 +37,7 @@ class Minesweeper
     end
 
     def game_over?(pos)
-        @board.bomb_coords.include?(pos)
+        return true if @board.bomb_coords.include?(pos)
     end
 
     def turn(action, pos)
@@ -49,7 +49,8 @@ class Minesweeper
             if !@board[pos].flagged? && !game_over?(pos)
                 @board[pos].explore 
             elsif game_over?(pos)
-
+                puts "You hit a bomb! Game over."
+                return @hit_bomb = true
             else
                 puts
                 puts "Position is flagged."
@@ -58,7 +59,7 @@ class Minesweeper
         else
             play_game
         end
-
+        
         @board.render
     end
 
