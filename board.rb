@@ -1,4 +1,5 @@
 require_relative "tile"
+require "colorize"
 require "byebug"
 
 class Board
@@ -39,14 +40,14 @@ class Board
 
     def render
         puts
-        puts "   #{(0..8).to_a.join(" ")}"
+        puts "   #{(0..8).to_a.join(" ")}".yellow
         puts
         @grid.each_with_index do |row, i|
             print_row = row.map do |tile|
                 # debugger
                 tile.render
             end
-            puts "#{i}  #{print_row.join(" ")}"
+            puts i.to_s.yellow + "  #{print_row.join(" ")}"
         end
     end
 

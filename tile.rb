@@ -1,4 +1,5 @@
 require "byebug"
+require "colorize"
 
 class Tile
 
@@ -59,11 +60,11 @@ class Tile
 
     def render
         if revealed? && !flagged? && !bomb?
-            return neighbor_bomb_count == 0 ? "_" : neighbor_bomb_count.to_s
+            return neighbor_bomb_count == 0 ? "_" : neighbor_bomb_count.to_s.blue
         elsif flagged?
-            return "F"
+            return "F".red
         elsif bomb? && revealed?
-            return "B"
+            return "B".red
         else
             return "*"
         end
