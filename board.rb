@@ -20,8 +20,8 @@ class Board
     def gen_bomb
         @bomb_coords = []
         until @bomb_coords.count == 10
-            row_coord = rand(0..8)
-            col_coord = rand(0..8)
+            row_coord = rand(8)
+            col_coord = rand(8)
             bomb_pos = [row_coord, col_coord]
             @bomb_coords << bomb_pos if !@bomb_coords.include?(bomb_pos)
         end
@@ -39,17 +39,25 @@ class Board
 
     def render
         puts
-        puts "  #{(0..8).to_a.join(" ")}"
+        puts "   #{(0..8).to_a.join(" ")}"
+        puts
         @grid.each_with_index do |row, i|
-            row.map! do |tile|
+            print_row = row.map do |tile|
                 # debugger
                 tile.render
             end
-            puts "#{i} #{row.join(" ")}"
+            puts "#{i}  #{print_row.join(" ")}"
         end
     end
 
 end
 
 board = Board.new
+# board.render
+pos = [1,2]
+pos2 = [5,4]
+pos3 = [7,8]
+board[pos].explore
+board[pos2].explore
+board[pos3].explore
 board.render

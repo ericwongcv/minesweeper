@@ -1,3 +1,5 @@
+require "byebug"
+
 class Tile
 
     def initialize(board, pos) # board instance and pos array 
@@ -17,7 +19,7 @@ class Tile
     end
 
     def revealed?
-        @revealed # = @value == "*" ? false : true
+        @revealed
     end
 
     def flagged?
@@ -40,7 +42,7 @@ class Tile
             y_delta = @pos[1] + delta[1]
             [x_delta, y_delta]
         end
-        surround
+        surround.select { |pos| pos[0].between?(0,8) && pos[1].between?(0,8)}
     end
 
     def render
@@ -57,17 +59,22 @@ class Tile
         count = 0
 
         neighbors.each do |pos|
-            count += 1 if board[pos].bomb?
+            count += 1 if @board[pos].bomb?
         end
 
         count
     end
 
-    def explored?
-        @explore = true
+    def explore
+        return @revealed = true if neighbor_bomb_count != 0
+        
+        @revealed = true
+        neighbors.each do |pos|
+            @board[pos].explore
+        end
     end
 
 end
 
-# a = Tile.new(1, [2,5])
-# p a.render
+# a = Tile.new(1, [1,1])
+# p a.explore
