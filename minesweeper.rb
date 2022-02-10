@@ -1,4 +1,5 @@
 require_relative "board.rb"
+require "colorize"
 require "yaml"
 require "byebug"
 
@@ -60,23 +61,23 @@ class Minesweeper
                 if !tile.revealed? || tile.flagged?
                     @board[pos].flag
                 else
-                    puts "Position cannot be flagged."
+                    puts "Position cannot be flagged.".red
                 end
             when "s"
                 if tile.revealed?
                     puts
-                    puts "Tile is already revealed."
+                    puts "Tile is already revealed.".red
                 elsif !tile.flagged? && !game_over?(pos)
                     tile.explore             
                 elsif !tile.flagged? && game_over?(pos)
                     puts
-                    puts "You hit a bomb! Game over."
+                    puts "You hit a bomb! Game over.".red
                     @board.render
                     puts
                     return @hit_bomb = true
                 else
                     puts
-                    puts "Position is flagged."
+                    puts "Position is flagged.".red
                     play_game
                 end
             when "save"
@@ -91,7 +92,7 @@ class Minesweeper
         nums = (0..9).to_a
         pos_arr = pos.split(",")
         if pos.length != 3 || pos_arr.length != 2 || !pos_arr.map(&:to_i).all? { |num| nums.include?(num) }
-            puts "Invalid Position."
+            puts "Invalid Position.".red
             return false 
         end
         true
@@ -99,7 +100,7 @@ class Minesweeper
 
     def valid_action?(action)
         return true if action == "f" || action == "s" || action == "save"
-        puts "Invalid Action."
+        puts "Invalid Action.".red
         false
     end
 
