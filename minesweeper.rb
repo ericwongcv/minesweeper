@@ -114,13 +114,10 @@ class Minesweeper
 end
 
 if $PROGRAM_NAME == __FILE__
-    # running as script
-  
     case ARGV.count
     when 0
       Minesweeper.new.play_game
     when 1
-      # resume game, using first argument
       YAML.load_file(ARGV.shift).play_game
     end
 end
