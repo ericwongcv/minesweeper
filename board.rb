@@ -3,7 +3,7 @@ require "byebug"
 
 class Board
 
-    attr_reader :bomb_coord, :grid
+    attr_reader :bomb_coords, :grid
 
     def new_grid
         grid = Array.new(9) do |row|
@@ -52,12 +52,12 @@ class Board
 
 end
 
-board = Board.new
+# board = Board.new
 # board.render
-pos = [1,2]
-pos2 = [5,4]
-pos3 = [0,8]
-board[pos].explore
-board[pos2].explore
-board[pos3].explore
-board.render
+# pos = [1,2]
+# pos2 = [5,4]
+# pos3 = [0,8]
+# board[pos].explore
+# board[pos2].explore
+# board[pos3].explore
+# board.render

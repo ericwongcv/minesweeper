@@ -18,8 +18,16 @@ class Tile
         @bomb = true
     end
 
+    def reveal
+        @revealed = true
+    end
+
     def revealed?
         @revealed
+    end
+
+    def flag
+        @flagged = !@flagged
     end
 
     def flagged?
@@ -46,7 +54,7 @@ class Tile
     end
 
     def render
-        if revealed? && !flagged?
+        if revealed? && !flagged? && !bomb?
             return neighbor_bomb_count == 0 ? "_" : neighbor_bomb_count.to_s
         elsif flagged?
             return "F"
