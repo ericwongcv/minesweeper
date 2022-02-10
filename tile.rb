@@ -66,11 +66,13 @@ class Tile
     end
 
     def explore
-        return @revealed = true if neighbor_bomb_count != 0
+        return @revealed = true if neighbor_bomb_count != 0 
         
-        @revealed = true
-        neighbors.each do |pos|
-            @board[pos].explore
+        if !revealed?
+            @revealed = true
+            neighbors.each do |pos|
+                @board[pos].explore
+            end
         end
     end
 

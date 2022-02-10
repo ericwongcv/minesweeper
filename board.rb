@@ -56,7 +56,7 @@ board = Board.new
 # board.render
 pos = [1,2]
 pos2 = [5,4]
-pos3 = [7,8]
+pos3 = [0,8]
 board[pos].explore
 board[pos2].explore
 board[pos3].explore
