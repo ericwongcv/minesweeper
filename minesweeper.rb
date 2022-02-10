@@ -18,7 +18,7 @@ class Minesweeper
                 action = gets.chomp.downcase
                 play_game if !valid_action?(action)
 
-                puts "Please choose a position to perform your action. eg. (3,4): "
+                puts "Please choose a position to perform your action. (ex. 3,4): "
                 pos = gets.chomp
                 play_game if !valid_position?(pos)
                 pos = pos.split(",").map(&:to_i)                
@@ -59,7 +59,7 @@ class Minesweeper
                 puts "Tile is already revealed."
             elsif !tile.flagged? && !game_over?(pos)
                 tile.explore             
-            elsif game_over?(pos)
+            elsif !tile.flagged? && game_over?(pos)
                 puts
                 puts "You hit a bomb! Game over."
                 puts
