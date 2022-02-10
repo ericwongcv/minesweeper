@@ -10,6 +10,10 @@ class Tile
         @bomb = false
     end
 
+    def end_game
+        @end_game = true
+    end
+
     def bomb?
         @bomb
     end
@@ -58,6 +62,8 @@ class Tile
             return neighbor_bomb_count == 0 ? "_" : neighbor_bomb_count.to_s
         elsif flagged?
             return "F"
+        elsif bomb? && revealed?
+            return "B"
         else
             return "*"
         end
